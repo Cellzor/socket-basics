@@ -21,7 +21,7 @@ io.on('connection', function(socket){
 
         //socket.broadcast sends it to everybody but sender - io.emit sends to everybody
         temp = message.text;
-        message.text = now.format('Do [of] MMM[-]YY HH:mm -----') + temp;
+        message.text = moment.utc(now.valueOf()).local().format('Do [of] MMM[-]YY HH:mm -----') + temp
         io.emit('message', message);
     });
 
