@@ -10,3 +10,18 @@ socket.on('connect', function(){
 socket.on('message', function(message){
     console.log('New message: ' + message.text);
 });
+
+// Handles submitting of new message
+var $form = jQuery('#message-form');    //# = id select like CSS
+
+$form.on('submit', function(event) {
+    event.preventDefault(); // prevents entire page refresh on submit click
+
+    var $message = $form.find('input[name=message]');
+
+    socket.emit('message', {
+        text: $message.val()
+    });
+
+    $message.val("");
+});
