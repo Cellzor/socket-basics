@@ -23,7 +23,7 @@ socket.on('message', function(message){
 
     console.log('New message: ' + message.text);
 
-    $message.append('<p><strong>' + message.name + ' on the ' + momentTimestamp.format("Do [of] MMM[-]YY[,] HH:mm:") + '</strong></p>');
+    $message.append('<p><strong>' + message.name + momentTimestamp.format("[ @] HH:mm:") + '</strong></p>');
     $message.append('<p>' + message.text + '</p>');
 });
 
