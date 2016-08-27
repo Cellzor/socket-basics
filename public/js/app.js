@@ -24,9 +24,21 @@ socket.on('message', function(message){
 
     console.log('New message: ' + message.text);
 
-    $message.append('<p><strong>' + message.name + momentTimestamp.format("[ @] HH:mm:") + '</strong></p>');
-    $message.append('<p>' + message.text + '</p>');
+    $message.append('<p><strong>' + message.name.replace(/<\/?[^>]+(>|$)/g, "") + momentTimestamp.format("[ @] HH:mm:") + '</strong></p>');
+    $message.append('<p>' + message.text.replace(/<\/?[^>]+(>|$)/g, "") + '</p>');
     $messages.append($message);
+
+
+
+
+    // $message.append('<p><strong>');
+    // // $message.text(message.name);
+    // $message.append(momentTimestamp.format("[ @] HH:mm:"));
+    // $message.append('</strong></p>');
+    // $message.append('<p>');
+    // // $message.text(message.text);
+    // $message.append('</p>');
+    // $messages.append($message);
 });
 
 // Handles submitting of new message
