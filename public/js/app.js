@@ -1,7 +1,11 @@
 /**
  * Created by Christian on 2016-08-24.
  */
+var name = getQueryVariable('name') || 'Anonymous';
+var room = getQueryVariable('room');
 var socket = io();
+
+console.log(name +' joined ' + room + ' ');
 
 socket.on('connect', function(){
     console.log('Connected to socket.io server');
@@ -9,9 +13,12 @@ socket.on('connect', function(){
 
 socket.on('message', function(message){
     var momentTimestamp = moment(message.timestamp).local();
+    var $message = jQuery('.messages'); // target by class use .
+
     console.log('New message: ' + message.text);
 
-    jQuery('.messages').append('<p><strong>' + momentTimestamp.format("Do [of] MMM[-]YY[,] HH:mm :") + '</strong>' + message.text + '</p>');     // target by class use .
+    $message.append('<p><strong>' + message.name + ' ' + momentTimestamp.format("Do [of] MMM[-]YY[,] HH:mm :") + '</strong></p>');
+    $message.append('<p>' + message.text + '</p>');
 });
 
 // Handles submitting of new message
@@ -23,6 +30,7 @@ $form.on('submit', function(event) {
     var $message = $form.find('input[name=message]');
 
     socket.emit('message', {
+        name: name,
         text: $message.val()
     });
 

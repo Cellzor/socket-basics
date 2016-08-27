@@ -16,17 +16,18 @@ app.use(express.static(__dirname + '/public'));
 io.on('connection', function(socket){
     console.log('User connected via socket.io');
 
+    socket.emit('message', {
+        name: 'System',
+        text: 'Welcome to the chat application',
+        timestamp: moment.valueOf()
+    });
+
     socket.on('message', function (message) {
         console.log('Message received: ' + moment().format('Do [of] MMM[-]YY HH:mm ') + message.text);
 
         //socket.broadcast.emit sends it to everybody but sender - io.emit sends to everybody
         message.timestamp = moment.valueOf();
         io.emit('message', message);
-    });
-
-    socket.emit('message', {
-        text: 'Welcome to the chat application',
-        timestamp: moment.valueOf()
     });
 
     socket.on('disconnect', function (event) {
