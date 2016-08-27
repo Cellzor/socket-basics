@@ -8,9 +8,10 @@ socket.on('connect', function(){
 });
 
 socket.on('message', function(message){
+    var momentTimestamp = moment(message.timestamp).local();
     console.log('New message: ' + message.text);
 
-    jQuery('.messages').append('<p>' + message.text + '</p>');     // target by class use .
+    jQuery('.messages').append('<p><strong>' + momentTimestamp.format("Do [of] MMM[-]YY[,] HH:mm :") + '</strong>' + message.text + '</p>');     // target by class use .
 });
 
 // Handles submitting of new message
