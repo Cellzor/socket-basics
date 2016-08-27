@@ -27,7 +27,7 @@ io.on('connection', function(socket){
             timeStamp: moment.valueOf()
         });
     });
-    
+
     socket.emit('message', {
         name: 'System',
         text: 'Welcome to the chat application',
@@ -44,6 +44,16 @@ io.on('connection', function(socket){
 
     socket.on('disconnect', function (event) {
         console.log('User disconnected');
+        var userData = clientInfo[socket.id];
+        if (typeof userData !== 'undefined') {
+            socket.leave(userData.room);
+            io.to(userData.room).emit('message', {
+                name: 'System',
+                text: userData.name + ' has left!',
+                timeStamp: moment.valueOf()
+            });
+            delete clientInfo[socket.id];
+        }
     })
 });
 
