@@ -11,6 +11,9 @@ jQuery('.room-title').text(room);
 
 socket.on('connect', function(){
     console.log('Connected to socket.io server');
+
+    socket.emit('getRoomInfo');
+
     socket.emit('joinRoom', {
         name: name,
         room: room
@@ -19,7 +22,7 @@ socket.on('connect', function(){
 
 socket.on('message', function(message){
     var momentTimestamp = moment(message.timestamp).local();
-    var $messages = jQuery('.messages'); // target by class use .
+    var $messages = jQuery('.messages');
     var $message = jQuery('<li class="list-group-item"></li>');
 
     console.log('New message: ' + message.text);
@@ -28,18 +31,18 @@ socket.on('message', function(message){
     $message.append('<p>' + message.text.replace(/<\/?[^>]+(>|$)/g, "") + '</p>');
     $messages.append($message);
 
-
-
-
-    // $message.append('<p><strong>');
-    // // $message.text(message.name);
-    // $message.append(momentTimestamp.format("[ @] HH:mm:"));
-    // $message.append('</strong></p>');
-    // $message.append('<p>');
-    // // $message.text(message.text);
-    // $message.append('</p>');
-    // $messages.append($message);
 });
+
+
+socket.on('roomInfo', function (rooms) {
+    var $roomList = jQuery('.room-list');
+    console.log('Rooms: ' + rooms.text);
+    $roomList.append('<label> Available rooms:  </label>');
+    rooms.rooms.forEach(function (room) {
+        $roomList.append('</br>'+ room);
+    });
+});
+
 
 // Handles submitting of new message
 var $form = jQuery('#message-form');    //# = id select like CSS

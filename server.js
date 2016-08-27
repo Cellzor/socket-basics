@@ -32,6 +32,7 @@ function sendCurrentUsers(socket) {
         }
     });
 
+
     socket.emit('message', {
         name: 'System',
         text: 'Current users: ' + users.join(', '),
@@ -39,9 +40,34 @@ function sendCurrentUsers(socket) {
     });
 }
 
+function sendCurrentChatRooms(socket){
+    var rooms = [];
+    // if (typeof clientInfo[socket] === 'undefined') {
+    //     console.log("fail");
+    //     return undefined;
+    // }
+    Object.keys(clientInfo).forEach(function (socketId) {
+        console.log(clientInfo[socketId].room);
+        if (clientInfo[socketId].room) {
+            rooms.push(clientInfo[socketId].room);
+        }
+
+    });
+    console.log(rooms);
+    socket.emit('roomInfo', {
+        text: 'Current open rooms: ',
+        rooms: rooms
+    });
+}
+
 //listen to events
 io.on('connection', function(socket){
     console.log('User connected via socket.io');
+
+    socket.on('getRoomInfo', function (req) {
+        console.log("getroominfo emit receivied");
+        sendCurrentChatRooms(socket);
+    });
 
     socket.on('joinRoom', function (req) {
         clientInfo[socket.id] = req;    //socket.id = unique socket id by socket.io
